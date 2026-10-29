@@ -53,7 +53,7 @@ An exact tested environment and dependency lock file have not yet been supplied 
 
 The two dataset files, `train.h5` and `test.h5`, are distributed separately and are **not included in this Git repository**.
 
-**Dataset download link: TODO — insert the public dataset download URL before distributing these instructions as a complete reproduction guide.**
+Download the datasets from [Google Drive](https://drive.google.com/drive/folders/1XTK-dCI0iVeWycX0kFSO0hEd8XqlrA9Z?usp=drive_link).
 
 Place the files at these paths relative to the repository root:
 
@@ -122,7 +122,11 @@ Checkpoints are saved periodically to `checkpoint_LSTM_6_6/simulator.pth`. The c
 
 ### LSTM versus GRU
 
-`model/simulator_LSTM.py` supports both cells through `use_gru`:
+**Select the cell in the training script where `simulator = Simulator(...)` is called.** For the two-stage command above, edit `trainMultiScheduled_LSTM.py`. If you run `trainMulti_LSTM.py` instead, edit the corresponding call in that file.
+
+`model/simulator_LSTM.py` implements both cells and accepts the `use_gru` argument; you do not need to change that class or its default argument to select a cell for an experiment.
+
+For LSTM, use the following model construction **in the training script**:
 
 ```python
 # LSTM
@@ -135,13 +139,26 @@ simulator = Simulator(
 )
 ```
 
-To train GRU, set `use_gru=True` in the model construction in `trainMultiScheduled_LSTM.py` and use a separate output directory, for example:
+For GRU, change only `use_gru=False` to `use_gru=True` in that same call:
+
+```python
+# GRU: in trainMultiScheduled_LSTM.py (or trainMulti_LSTM.py)
+simulator = Simulator(
+    message_passing_num=12,
+    node_input_size=6,
+    edge_input_size=5,
+    device=device,
+    use_gru=True,
+)
+```
+
+After selecting GRU in `trainMultiScheduled_LSTM.py`, run the two-stage training with a separate output directory, for example:
 
 ```bash
 python trainMultiScheduled_LSTM.py --save_root checkpoint_GRU_6_6
 ```
 
-The filename alone does not identify the recurrent cell. For example, the uploaded `trainMulti_LSTM.py` explicitly selects `use_gru=True`, while `trainMultiScheduled_LSTM.py` uses the default LSTM. Match the cell and all architecture settings when loading a checkpoint.
+The filename alone does not identify the recurrent cell. In the uploaded code, `trainMulti_LSTM.py` explicitly selects `use_gru=True`, while `trainMultiScheduled_LSTM.py` omits the argument and therefore uses the default LSTM (`use_gru=False`). Match the cell and all architecture settings when loading a checkpoint.
 
 ## 6. Autoregressive rollout
 
