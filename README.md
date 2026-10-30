@@ -55,6 +55,10 @@ The two dataset files, `train.h5` and `test.h5`, are distributed separately and 
 
 Download the datasets from [Google Drive](https://drive.google.com/drive/folders/1XTK-dCI0iVeWycX0kFSO0hEd8XqlrA9Z?usp=drive_link).
 
+The original Cylinder (`cylinder_flow`) and Airfoil (`airfoil`) datasets can be downloaded from [DeepMind's official MeshGraphNets repository](https://github.com/google-deepmind/deepmind-research/tree/master/meshgraphnets#datasets).
+
+The Julia script `Bump_ref.jl` can be used to perform mesh refinement and generate refined numerical reference solutions for the Euler dataset.
+
 Place the files at these paths relative to the repository root:
 
 | File | Path |
